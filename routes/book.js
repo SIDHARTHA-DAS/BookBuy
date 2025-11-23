@@ -74,18 +74,20 @@ router.get("/get-all-books",async(req,res)=>{
 })
 
 // get recent added book limit 4
-router.get("/get-recent-books",async(req,res)=>{
+router.get("/get-recent-books", async (req, res) => {
   try {
-    const books = await Book.find().sort({createAt: -1}).limit(5)
-    return res.json({
-      status:"Success",
+    const books = await Book.find().sort({ createdAt: -1 }).limit(5);
+
+    return res.status(200).json({
+      status: "success",
       data: books,
-    })
+    });
   } catch (error) {
-     console.log(error)
-    res.status(500).json({message:" server error"});
+    console.log(error);
+    res.status(500).json({ message: "Server error" });
   }
-})
+});
+
 
 // get book by id
 router.get("/get-book-by-id/:id", async(req, res)=>{
