@@ -10,7 +10,11 @@ const Faourite = require("./routes/favourite")
 const Cart = require("./routes/cart")
 const Order = require("./routes/order")
 
-app.use(cors())
+app.use(cors({
+  origin: ["http://localhost:5174", "http://localhost:5173", "https://book-buy.vercel.app"],
+  methods: ["GET", "POST", "PUT", "DELETE"],
+  credentials: true
+}))
 app.use(express.json())
 
 // routes
@@ -23,6 +27,6 @@ app.use("/api/v1",Order)
 
 
 // createing port
-app.listen(process.env.PORT,()=>{
+app.listen(process.env.PORT || 5000 ,()=>{
   console.log("server start")
 })
