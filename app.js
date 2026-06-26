@@ -17,6 +17,12 @@ app.use(cors({
 }))
 app.use(express.json())
 
+// ✅ Har request se pehle DB connect karo
+app.use(async (req, res, next) => {
+  await connection();
+  next();
+});
+
 // routes
 
 app.use("/api/v1",User)
