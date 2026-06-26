@@ -47,28 +47,38 @@ router.post("/sign-up", async(req, res)=>{
 })
 
 // sign in
-router.post("/sign-in", async(req, res)=>{
-   try {
-    const {username,password} = req.body;
-    const existingUser = await User.findOne({username})
+// router.post("/sign-in", async(req, res)=>{
+router.post("/sign-in", async(req, res) => {
+  try {
+    const { username, password } = req.body;
+    const existingUser = await User.findOne({ username });
+    
+    // ✅ return add kiya
     if(!existingUser){
-      res.status(400).json({message:"Invalid credentials"})
+      return res.status(400).json({ message: "Invalid credentials" });
     }
-    await bcrypt.compare(password,existingUser.password,(err,data)=>{
+
+    await bcrypt.compare(password, existingUser.password, (err, data) => {
       if(data){
         const authClaims = [
-          {name:existingUser.username},{role:existingUser.role},
-        ]
-        const token = jwt.sign({authClaims},"bookStore123",{expiresIn:"30d"})
-        res.status(200).json({id: existingUser._id, role: existingUser.role , token:token});
-      }else{
-        res.status(400).json({message:"Invalid credentials"});
+          { name: existingUser.username },
+          { role: existingUser.role },
+        ];
+        const token = jwt.sign({ authClaims }, "bookStore123", { expiresIn: "30d" });
+        return res.status(200).json({
+          id: existingUser._id,
+          role: existingUser.role,
+          token: token
+        });
+      } else {
+        return res.status(400).json({ message: "Invalid credentials" });
       }
-    })
-   }catch (error) {
-    res.status(500).json({message:"internal server error"});
+    });
+
+  } catch (error) {
+    res.status(500).json({ message: "Internal server error" });
   }
-})
+});
 
 // get user information
 
